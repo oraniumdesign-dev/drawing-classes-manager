@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --color-cream: #FAF8F5;
+  --color-charcoal: #2C2C2C;
+  --color-rose: #C8A4A4;
+  --color-lavender: #B8A8C8;
+  --color-sage: #9AB09A;
+  --color-beige: #E8DFD0;
+}
+
+html {
+  direction: rtl;
+  font-family: 'Heebo', sans-serif;
+  background-color: var(--color-cream);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+/* Hide scrollbars but keep scrollability */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area padding for iPhone home indicator */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out both;
+}
+
+/* Better tap highlighting */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Improve button press on touch */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Ensure RTL icons/arrows are not flipped unintentionally */
+[dir="rtl"] svg.no-flip {
+  transform: none;
+}
