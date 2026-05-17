@@ -9,7 +9,7 @@ import { SuccessModal } from "@/components/modals/SuccessModal";
 import { useApp } from "@/lib/context/AppContext";
 
 // These pages manage their own header
-const NO_HEADER_ROUTES = ["/schedule", "/class/"];
+const NO_HEADER_ROUTES = ["/schedule", "/class/", "/terms"];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { showRegistrationTypeModal, cancelTargetId, successInfo } = useApp();

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F5C200"/>
+  <text
+    x="200"
+    y="248"
+    font-size="168"
+    font-weight="900"
+    font-family="Georgia, 'Times New Roman', serif"
+    fill="#1a1a1a"
+    text-anchor="middle"
+    letter-spacing="-4"
+  >NHR</text>
+  <text
+    x="200"
+    y="300"
+    font-size="20"
+    font-family="Arial, Helvetica, sans-serif"
+    fill="#1a1a1a"
+    text-anchor="middle"
+    letter-spacing="0.5"
+  >נטע הראל רימון • סטודיו לאמנות הציור</text>
+</svg>
