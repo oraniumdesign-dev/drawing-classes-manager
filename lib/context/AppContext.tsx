@@ -45,6 +45,9 @@ interface AppContextValue {
   register: (classId: string, type: RegistrationType) => void;
   cancelRegistration: (classId: string) => void;
   joinWaitlist: (classId: string) => void;
+  adminAddClass: (cls: ArtClass) => void;
+  adminEditClass: (classId: string, updates: Partial<ArtClass>) => void;
+  adminCancelClass: (classId: string) => void;
 }
 
 interface AppProviderProps {
@@ -159,6 +162,31 @@ export function AppProvider({
     [classes]
   );
 
+  const adminAddClass = useCallback((newClass: ArtClass) => {
+    setClasses((prev) =>
+      [...prev, newClass].sort((a, b) => {
+        const da = `${a.date}T${a.startTime}`;
+        const db = `${b.date}T${b.startTime}`;
+        return da.localeCompare(db);
+      })
+    );
+  }, []);
+
+  const adminEditClass = useCallback(
+    (classId: string, updates: Partial<ArtClass>) => {
+      setClasses((prev) =>
+        prev.map((c) => (c.id === classId ? { ...c, ...updates } : c))
+      );
+    },
+    []
+  );
+
+  const adminCancelClass = useCallback((classId: string) => {
+    setClasses((prev) =>
+      prev.map((c) => (c.id === classId ? { ...c, status: "canceled" } : c))
+    );
+  }, []);
+
   const joinWaitlist = useCallback(
     (classId: string) => {
       const cls = classes.find((c) => c.id === classId);
@@ -212,6 +240,9 @@ export function AppProvider({
         register,
         cancelRegistration,
         joinWaitlist,
+        adminAddClass,
+        adminEditClass,
+        adminCancelClass,
       }}
     >
       {children}

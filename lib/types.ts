@@ -1,4 +1,4 @@
-export type ClassType = "group" | "private";
+export type ClassType = "group" | "private" | "event";
 export type RegistrationStatus = "registered" | "waitlist" | "none";
 export type ClassStatus = "active" | "canceled" | "time-changed";
 export type RegistrationType = "subscription" | "single";
