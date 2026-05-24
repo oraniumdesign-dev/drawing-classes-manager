@@ -14,8 +14,12 @@ import type {
   RegistrationType,
   User,
 } from "../types";
-import { MOCK_CLASSES, MOCK_REGISTRATIONS, CURRENT_USER } from "../mock-data";
 import { getRegistrationStatus, getAvailableSpots } from "../utils/status";
+import {
+  registerForClass,
+  cancelRegistration as cancelRegistrationAction,
+  joinWaitlist as joinWaitlistAction,
+} from "../actions/registrations";
 
 interface SuccessInfo {
   title: string;
@@ -26,34 +30,41 @@ interface AppContextValue {
   user: User;
   classes: ArtClass[];
   registrations: Registration[];
-  // modal state
   showRegistrationTypeModal: boolean;
   openRegistrationTypeModal: () => void;
   closeRegistrationTypeModal: () => void;
-  // cancel modal
   cancelTargetId: string | null;
   openCancelModal: (classId: string) => void;
   closeCancelModal: () => void;
-  // success
   successInfo: SuccessInfo | null;
   clearSuccess: () => void;
-  // helpers
   getRegStatus: (classId: string) => RegistrationStatus;
   getSpots: (classId: string) => number;
   getClass: (classId: string) => ArtClass | undefined;
   getRegistration: (classId: string) => Registration | undefined;
-  // actions
   register: (classId: string, type: RegistrationType) => void;
   cancelRegistration: (classId: string) => void;
   joinWaitlist: (classId: string) => void;
 }
 
+interface AppProviderProps {
+  children: ReactNode;
+  initialClasses: ArtClass[];
+  initialRegistrations: Registration[];
+  initialUser: User;
+}
+
 const AppContext = createContext<AppContextValue | null>(null);
 
-export function AppProvider({ children }: { children: ReactNode }) {
-  const [classes, setClasses] = useState<ArtClass[]>(MOCK_CLASSES);
+export function AppProvider({
+  children,
+  initialClasses,
+  initialRegistrations,
+  initialUser,
+}: AppProviderProps) {
+  const [classes, setClasses] = useState<ArtClass[]>(initialClasses);
   const [registrations, setRegistrations] =
-    useState<Registration[]>(MOCK_REGISTRATIONS);
+    useState<Registration[]>(initialRegistrations);
   const [showRegistrationTypeModal, setShowRegistrationTypeModal] =
     useState(false);
   const [cancelTargetId, setCancelTargetId] = useState<string | null>(null);
@@ -79,7 +90,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const getRegistration = useCallback(
     (classId: string) =>
-      registrations.find((r) => r.classId === classId && r.status !== "canceled"),
+      registrations.find(
+        (r) => r.classId === classId && r.status !== "canceled"
+      ),
     [registrations]
   );
 
@@ -87,9 +100,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (classId: string, type: RegistrationType) => {
       const cls = classes.find((c) => c.id === classId);
       if (!cls) return;
+
+      // Optimistic update
       const newReg: Registration = {
         id: `reg-${Date.now()}`,
-        userId: CURRENT_USER.id,
+        userId: initialUser.id,
         classId,
         type,
         status: "registered",
@@ -107,14 +122,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
         title: "נרשמת בהצלחה!",
         body: `נרשמת לשיעור "${cls.title}" ביום ${cls.date.slice(8)}.${cls.date.slice(5, 7)} בשעה ${cls.startTime}`,
       });
+
+      registerForClass(classId, type).catch(console.error);
     },
-    [classes]
+    [classes, initialUser.id]
   );
 
   const cancelRegistration = useCallback(
     (classId: string) => {
       const cls = classes.find((c) => c.id === classId);
       if (!cls) return;
+
+      // Optimistic update
       setRegistrations((prev) =>
         prev.map((r) =>
           r.classId === classId && r.status === "registered"
@@ -134,6 +153,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         title: "ההרשמה בוטלה",
         body: `ההרשמה שלך לשיעור "${cls.title}" בוטלה בהצלחה.`,
       });
+
+      cancelRegistrationAction(classId).catch(console.error);
     },
     [classes]
   );
@@ -142,9 +163,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (classId: string) => {
       const cls = classes.find((c) => c.id === classId);
       if (!cls) return;
+
+      // Optimistic update
       const newReg: Registration = {
         id: `reg-${Date.now()}`,
-        userId: CURRENT_USER.id,
+        userId: initialUser.id,
         classId,
         type: "subscription",
         status: "waitlist",
@@ -162,14 +185,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
         title: "נוספת לרשימת ההמתנה",
         body: `אם תתפנה מקום בשיעור "${cls.title}", נעדכן אותך בהקדם.`,
       });
+
+      joinWaitlistAction(classId).catch(console.error);
     },
-    [classes]
+    [classes, initialUser.id]
   );
 
   return (
     <AppContext.Provider
       value={{
-        user: CURRENT_USER,
+        user: initialUser,
         classes,
         registrations,
         showRegistrationTypeModal,

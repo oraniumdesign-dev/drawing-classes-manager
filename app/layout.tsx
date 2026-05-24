@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppProvider } from "@/lib/context/AppContext";
 import { AppShell } from "@/components/layout/AppShell";
+import { getClasses, getRegistrations, getCurrentUser } from "@/lib/queries";
 
 export const metadata: Metadata = {
   title: "נטע הראל רימון | סטודיו לאומנות הציור",
@@ -22,11 +23,14 @@ export const viewport: Viewport = {
   themeColor: "#FAF8F5",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [classes, user] = await Promise.all([getClasses(), getCurrentUser()]);
+  const registrations = await getRegistrations(user.id);
+
   return (
     <html lang="he" dir="rtl">
       <head>
@@ -38,7 +42,11 @@ export default function RootLayout({
         />
       </head>
       <body className="font-heebo bg-cream antialiased">
-        <AppProvider>
+        <AppProvider
+          initialClasses={classes}
+          initialRegistrations={registrations}
+          initialUser={user}
+        >
           <AppShell>{children}</AppShell>
         </AppProvider>
       </body>

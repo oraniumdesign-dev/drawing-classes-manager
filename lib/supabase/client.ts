@@ -1,0 +1,14 @@
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+
+let _client: ReturnType<typeof createSupabaseClient> | null = null;
+
+// Browser-side singleton (uses anon key)
+export function createClient() {
+  if (!_client) {
+    _client = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+  }
+  return _client;
+}
