@@ -24,7 +24,7 @@ export function AdminCancelModal({ cls, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" dir="rtl">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={() => onClose()} />
 
       <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6">
         {/* Icon */}
@@ -57,7 +57,7 @@ export function AdminCancelModal({ cls, onClose }: Props) {
           <Button variant="danger" size="lg" fullWidth onClick={handleCancel}>
             כן, לבטל את השיעור
           </Button>
-          <Button variant="ghost" size="lg" fullWidth onClick={onClose}>
+          <Button variant="ghost" size="lg" fullWidth onClick={() => onClose()}>
             לא, לשמור על השיעור
           </Button>
         </div>
