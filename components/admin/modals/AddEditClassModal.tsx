@@ -107,7 +107,7 @@ export function AddEditClassModal({ cls, onClose }: Props) {
             {isEdit ? "עריכת שיעור" : "שיעור חדש"}
           </h2>
           <button
-            onClick={onClose}
+            onClick={() => onClose()}
             className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center"
             aria-label="סגירה"
           >
