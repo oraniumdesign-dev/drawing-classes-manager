@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils/cn";
 
 interface Props {
   cls?: ArtClass;
-  onClose: () => void;
+  onClose: (date?: string, newId?: string) => void;
 }
 
 interface FormState {
@@ -75,16 +75,18 @@ export function AddEditClassModal({ cls, onClose }: Props) {
 
     if (isEdit) {
       adminEditClass(cls!.id, updates);
+      onClose("saved");
     } else {
+      const newId = `cls-${Date.now()}`;
       adminAddClass({
-        id: `cls-${Date.now()}`,
+        id: newId,
         teacher: { id: "teacher-1", name: "נטע הראל רימון" },
         registeredCount: 0,
         waitlistCount: 0,
         ...(updates as Omit<ArtClass, "id" | "teacher" | "registeredCount" | "waitlistCount">),
       } as ArtClass);
+      onClose(form.date, newId);
     }
-    onClose();
   }
 
   const isValid = form.title.trim().length > 0 && form.date.length > 0;
@@ -156,7 +158,8 @@ export function AddEditClassModal({ cls, onClose }: Props) {
             <input
               type="date"
               value={form.date}
-              onChange={(e) => set("date", e.target.value)}
+              onChange={(e) => { if (e.target.value) set("date", e.target.value); }}
+              onInput={(e) => { const v = (e.target as HTMLInputElement).value; if (v) set("date", v); }}
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-base text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-dust-300"
             />
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "@/lib/context/AppContext";
 import { AdminClassCard } from "@/components/admin/AdminClassCard";
@@ -38,12 +38,34 @@ function dateToStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+type Toast = { message: string; key: number };
+
 export default function AdminPage() {
   const { classes } = useApp();
   const today = todayStr();
 
   const [weekStart, setWeekStart] = useState<Date>(() => getWeekSunday(today));
   const [modal, setModal] = useState<ModalState>({ type: "none" });
+  const [toast, setToast] = useState<Toast | null>(null);
+  const [scrollToDate, setScrollToDate] = useState<string | null>(null);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  useEffect(() => {
+    if (!scrollToDate) return;
+    const el = document.getElementById(`day-${scrollToDate}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setScrollToDate(null);
+  }, [scrollToDate]);
+
+  function showToast(message: string) {
+    setToast({ message, key: Date.now() });
+  }
 
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
@@ -72,7 +94,18 @@ export default function AdminPage() {
     });
   }
 
-  const closeModal = () => setModal({ type: "none" });
+  function closeModal(opts?: { goToDate?: string; toast?: string; highlightId?: string }) {
+    setModal({ type: "none" });
+    if (opts?.goToDate) {
+      setWeekStart(getWeekSunday(opts.goToDate));
+      setScrollToDate(opts.goToDate);
+    }
+    if (opts?.toast) showToast(opts.toast);
+    if (opts?.highlightId) {
+      setHighlightId(opts.highlightId);
+      setTimeout(() => setHighlightId(null), 1800);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-cream font-heebo" dir="rtl">
@@ -147,7 +180,7 @@ export default function AdminPage() {
           const activeCount = dayClasses.filter((c) => c.status !== "canceled").length;
 
           return (
-            <div key={dateStr}>
+            <div key={dateStr} id={`day-${dateStr}`}>
               {/* Day header */}
               <div className="flex items-center gap-2 mb-2.5">
                 <span
@@ -179,6 +212,7 @@ export default function AdminPage() {
                     <AdminClassCard
                       key={cls.id}
                       cls={cls}
+                      highlight={cls.id === highlightId}
                       onEdit={() => setModal({ type: "edit", cls })}
                       onCancel={() => setModal({ type: "cancel", cls })}
                       onRoster={() => setModal({ type: "roster", cls })}
@@ -207,10 +241,48 @@ export default function AdminPage() {
       </button>
 
       {/* ── Modals ───────────────────────────────────────────── */}
-      {modal.type === "add" && <AddEditClassModal onClose={closeModal} />}
-      {modal.type === "edit" && <AddEditClassModal cls={modal.cls} onClose={closeModal} />}
-      {modal.type === "cancel" && <AdminCancelModal cls={modal.cls} onClose={closeModal} />}
-      {modal.type === "roster" && <RosterModal cls={modal.cls} onClose={closeModal} />}
+      {modal.type === "add" && (
+        <AddEditClassModal
+          onClose={(date, newId) =>
+            date
+              ? closeModal({ goToDate: date, toast: "השיעור נוסף בהצלחה", highlightId: newId })
+              : closeModal()
+          }
+        />
+      )}
+      {modal.type === "edit" && (
+        <AddEditClassModal
+          cls={modal.cls}
+          onClose={(val) =>
+            val === "saved"
+              ? closeModal({ toast: "השיעור עודכן בהצלחה" })
+              : closeModal()
+          }
+        />
+      )}
+      {modal.type === "cancel" && (
+        <AdminCancelModal
+          cls={modal.cls}
+          onClose={(canceled) =>
+            canceled
+              ? closeModal({ toast: "השיעור בוטל" })
+              : closeModal()
+          }
+        />
+      )}
+      {modal.type === "roster" && (
+        <RosterModal cls={modal.cls} onClose={() => closeModal()} />
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div
+          key={toast.key}
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-charcoal text-white text-sm font-medium px-5 py-3 rounded-2xl shadow-lg animate-fade-in-up"
+        >
+          {toast.message}
+        </div>
+      )}
     </div>
   );
 }

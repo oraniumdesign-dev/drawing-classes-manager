@@ -16,7 +16,12 @@ function ScheduleContent() {
   const [selectedDate, setSelectedDate] = useState(todayStr());
 
   const filteredClasses = useMemo(
-    () => classes.filter((c) => c.type === type),
+    () =>
+      classes.filter((c) =>
+        type === "group"
+          ? c.type === "group" || c.type === "event"
+          : c.type === type
+      ),
     [classes, type]
   );
 

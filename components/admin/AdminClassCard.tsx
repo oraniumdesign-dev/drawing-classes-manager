@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils/cn";
 
 interface Props {
   cls: ArtClass;
+  highlight?: boolean;
   onEdit: () => void;
   onCancel: () => void;
   onRoster: () => void;
@@ -21,7 +22,7 @@ const TYPE_COLORS: Record<string, string> = {
   event: "bg-rose-dust-100 text-rose-dust-600",
 };
 
-export function AdminClassCard({ cls, onEdit, onCancel, onRoster }: Props) {
+export function AdminClassCard({ cls, highlight, onEdit, onCancel, onRoster }: Props) {
   const isCanceled = cls.status === "canceled";
   const isTimeChanged = cls.status === "time-changed";
   const isFull = cls.registeredCount >= cls.capacity;
@@ -29,8 +30,9 @@ export function AdminClassCard({ cls, onEdit, onCancel, onRoster }: Props) {
   return (
     <div
       className={cn(
-        "rounded-2xl border overflow-hidden",
-        isCanceled ? "border-gray-100 bg-gray-50 opacity-60" : "border-gray-200 bg-white"
+        "rounded-2xl border overflow-hidden transition-colors duration-500",
+        isCanceled ? "border-gray-100 bg-gray-50 opacity-60" : "border-gray-200 bg-white",
+        highlight && "ring-2 ring-rose-dust-300 bg-rose-dust-50"
       )}
     >
       {isCanceled && (

@@ -2,10 +2,13 @@
 import Image from "next/image";
 import { useApp } from "@/lib/context/AppContext";
 import { UpcomingClassCard } from "@/components/home/UpcomingClassCard";
+import { ClassCard } from "@/components/schedule/ClassCard";
 import { Button } from "@/components/ui/Button";
+import { todayStr } from "@/lib/utils/dates";
 
 export default function HomePage() {
   const { classes, registrations, user, openRegistrationTypeModal } = useApp();
+  const today = todayStr();
 
   // Get all active (non-canceled) registrations sorted by date
   const upcomingRegistrations = registrations
@@ -20,6 +23,22 @@ export default function HomePage() {
 
   const nextClass = upcomingRegistrations[0];
   const moreClasses = upcomingRegistrations.slice(1);
+
+  // Classes available for registration (active, upcoming, not registered, not private)
+  const registeredClassIds = new Set(
+    registrations.filter((r) => r.status !== "canceled").map((r) => r.classId)
+  );
+  const availableClasses = classes
+    .filter(
+      (c) =>
+        c.status !== "canceled" &&
+        c.date >= today &&
+        c.type !== "private" &&
+        !registeredClassIds.has(c.id)
+    )
+    .sort((a, b) =>
+      `${a.date}T${a.startTime}`.localeCompare(`${b.date}T${b.startTime}`)
+    );
 
   return (
     <div dir="rtl">
@@ -81,6 +100,18 @@ export default function HomePage() {
             <div className="space-y-3">
               {moreClasses.map((cls) => (
                 <UpcomingClassCard key={cls!.id} cls={cls!} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Available classes to register */}
+        {availableClasses.length > 0 && (
+          <section>
+            <h2 className="text-lg font-bold text-charcoal mb-3">שיעורים לרישום</h2>
+            <div className="space-y-3">
+              {availableClasses.map((cls) => (
+                <ClassCard key={cls.id} cls={cls} />
               ))}
             </div>
           </section>

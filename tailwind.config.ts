@@ -44,6 +44,15 @@ const config: Config = {
       fontFamily: {
         heebo: ["Heebo", "sans-serif"],
       },
+      keyframes: {
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateX(-50%) translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateX(-50%) translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-in-up": "fade-in-up 0.2s ease-out",
+      },
       fontSize: {
         "2xs": "11px",
         xs: "13px",

@@ -64,7 +64,7 @@ export function DateStrip({ selected, onSelect, availableDates }: DateStripProps
                   : isToday
                   ? "bg-rose-dust-100 text-charcoal"
                   : hasClasses
-                  ? "bg-gray-50 text-charcoal hover:bg-gray-100"
+                  ? "bg-lavender-100 text-charcoal hover:bg-lavender-200"
                   : "bg-gray-50 text-gray-300"
               )}
             >

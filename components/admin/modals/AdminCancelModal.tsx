@@ -7,7 +7,7 @@ import { ALL_REGISTRATIONS } from "@/lib/admin-mock-data";
 
 interface Props {
   cls: ArtClass;
-  onClose: () => void;
+  onClose: (canceled?: boolean) => void;
 }
 
 export function AdminCancelModal({ cls, onClose }: Props) {
@@ -19,7 +19,7 @@ export function AdminCancelModal({ cls, onClose }: Props) {
 
   function handleCancel() {
     adminCancelClass(cls.id);
-    onClose();
+    onClose(true);
   }
 
   return (

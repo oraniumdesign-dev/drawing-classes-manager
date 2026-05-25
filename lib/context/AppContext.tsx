@@ -20,6 +20,11 @@ import {
   cancelRegistration as cancelRegistrationAction,
   joinWaitlist as joinWaitlistAction,
 } from "../actions/registrations";
+import {
+  addClassAction,
+  editClassAction,
+  cancelClassAction,
+} from "../actions/classes";
 
 interface SuccessInfo {
   title: string;
@@ -170,6 +175,7 @@ export function AppProvider({
         return da.localeCompare(db);
       })
     );
+    addClassAction(newClass).catch(console.error);
   }, []);
 
   const adminEditClass = useCallback(
@@ -177,6 +183,7 @@ export function AppProvider({
       setClasses((prev) =>
         prev.map((c) => (c.id === classId ? { ...c, ...updates } : c))
       );
+      editClassAction(classId, updates).catch(console.error);
     },
     []
   );
@@ -185,6 +192,7 @@ export function AppProvider({
     setClasses((prev) =>
       prev.map((c) => (c.id === classId ? { ...c, status: "canceled" } : c))
     );
+    cancelClassAction(classId).catch(console.error);
   }, []);
 
   const joinWaitlist = useCallback(
