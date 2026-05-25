@@ -93,7 +93,7 @@ export function AddEditClassModal({ cls, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col justify-end" dir="rtl">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={() => onClose()} />
 
       <div className="relative bg-white rounded-t-3xl shadow-2xl max-h-[92vh] flex flex-col">
         {/* Handle */}
