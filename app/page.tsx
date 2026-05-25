@@ -44,27 +44,13 @@ export default function HomePage() {
     <div dir="rtl">
       {/* Hero */}
       <div className="relative h-52 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-dust-200 via-lavender-200 to-sage-200" />
-        {/* Decorative paint strokes */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-4 right-8 w-32 h-32 rounded-full bg-rose-dust-400 blur-3xl" />
-          <div className="absolute bottom-2 left-4 w-24 h-24 rounded-full bg-lavender-400 blur-2xl" />
-          <div className="absolute top-8 left-1/2 w-20 h-20 rounded-full bg-sage-300 blur-2xl" />
-        </div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden mb-3 shadow-md">
-            <Image
-              src="/nhr-logo.svg"
-              alt="לוגו נטע הראל רימון"
-              width={80}
-              height={80}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <h1 className="text-xl font-bold text-charcoal">הסטודיו לאמנות הציור</h1>
-          <p className="text-base text-gray-700 mt-0.5">נטע הראל רימון</p>
-          <p className="text-xs text-gray-500 mt-0.5">רחוב רות 21, כרמליה</p>
-        </div>
+        <Image
+          src="/hero-brushes.jpg"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </div>
 
       <div className="px-4 pt-5 space-y-6">
