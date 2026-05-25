@@ -1,16 +1,16 @@
 import type { User, Registration } from "./types";
 
 export const MOCK_STUDENTS: User[] = [
-  { id: "user-1",  name: "מרים כהן",     firstName: "מרים",   phone: "050-1234567", hasSubscription: true  },
-  { id: "user-2",  name: "רחל לוי",      firstName: "רחל",    phone: "052-2345678", hasSubscription: true  },
-  { id: "user-3",  name: "שרה ברק",      firstName: "שרה",    phone: "054-3456789", hasSubscription: false },
-  { id: "user-4",  name: "דבורה שלום",   firstName: "דבורה",  phone: "058-4567890", hasSubscription: true  },
-  { id: "user-5",  name: "חנה מזרחי",    firstName: "חנה",    phone: "050-5678901", hasSubscription: true  },
-  { id: "user-6",  name: "יהודית אברהם", firstName: "יהודית", phone: "052-6789012", hasSubscription: true  },
-  { id: "user-7",  name: "לאה גולדברג",  firstName: "לאה",    phone: "054-7890123", hasSubscription: false },
-  { id: "user-8",  name: "רות כהן",      firstName: "רות",    phone: "058-8901234", hasSubscription: true  },
-  { id: "user-9",  name: "אסתר לוין",    firstName: "אסתר",   phone: "050-9012345", hasSubscription: true  },
-  { id: "user-10", name: "נעמי ברגר",    firstName: "נעמי",   phone: "052-0123456", hasSubscription: true  },
+  { id: "user-1",  name: "מרים כהן",     firstName: "מרים",   phone: "050-1234567", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000001" },
+  { id: "user-2",  name: "רחל לוי",      firstName: "רחל",    phone: "052-2345678", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000002" },
+  { id: "user-3",  name: "שרה ברק",      firstName: "שרה",    phone: "054-3456789", hasSubscription: false, token: "00000000-0000-0000-0000-000000000003" },
+  { id: "user-4",  name: "דבורה שלום",   firstName: "דבורה",  phone: "058-4567890", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000004" },
+  { id: "user-5",  name: "חנה מזרחי",    firstName: "חנה",    phone: "050-5678901", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000005" },
+  { id: "user-6",  name: "יהודית אברהם", firstName: "יהודית", phone: "052-6789012", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000006" },
+  { id: "user-7",  name: "לאה גולדברג",  firstName: "לאה",    phone: "054-7890123", hasSubscription: false, token: "00000000-0000-0000-0000-000000000007" },
+  { id: "user-8",  name: "רות כהן",      firstName: "רות",    phone: "058-8901234", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000008" },
+  { id: "user-9",  name: "אסתר לוין",    firstName: "אסתר",   phone: "050-9012345", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000009" },
+  { id: "user-10", name: "נעמי ברגר",    firstName: "נעמי",   phone: "052-0123456", hasSubscription: true,  token: "00000000-0000-0000-0000-000000000010" },
 ];
 
 export const ALL_REGISTRATIONS: Registration[] = [

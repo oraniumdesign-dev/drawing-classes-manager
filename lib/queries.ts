@@ -57,18 +57,37 @@ export async function getCurrentUser(): Promise<User> {
 
   if (error || !data) return CURRENT_USER;
 
-  return {
-    id: data.id,
-    name: data.name,
-    firstName: data.first_name,
-    phone: data.phone,
-    hasSubscription: data.has_subscription,
-  };
+  return mapUser(data);
+}
+
+export async function getUsers(): Promise<User[]> {
+  if (!isConfigured()) return [CURRENT_USER];
+
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .order("name", { ascending: true });
+
+  if (error || !data) return [CURRENT_USER];
+
+  return data.map(mapUser);
 }
 
 // ── Mappers ──────────────────────────────────────────────
 
 type DbRow = Record<string, unknown>;
+
+function mapUser(row: DbRow): User {
+  return {
+    id: row.id as string,
+    name: row.name as string,
+    firstName: row.first_name as string,
+    phone: row.phone as string,
+    hasSubscription: row.has_subscription as boolean,
+    token: (row.token as string) ?? "",
+  };
+}
 
 function mapClass(row: DbRow): ArtClass {
   const teacher = row.teacher as DbRow;

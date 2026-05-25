@@ -45,4 +45,5 @@ export interface User {
   firstName: string;
   phone: string;
   hasSubscription: boolean;
+  token: string;
 }
